@@ -1,5 +1,8 @@
 ﻿#include "GameScene.h"
 #include <cassert>
+#include "Collision.h"
+#include <sstream>
+#include <iomanip>
 
 using namespace DirectX;
 
@@ -51,6 +54,12 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	//modelSphere = Model::Create("sphere");
 	//objSphere=Object3d::Create()
 
+	//球の初期値を設定
+	sphere.center = XMVectorSet(0, 2, 0, 1);//中心点座標
+	sphere.radius = 1.0f;//半径
+	//平面の初期値を設定
+	plane.normal = XMVectorSet(0, 1, 0, 0);//法線ベクトル
+	plane.distance = 0.0f;//原点(0,0,0)からの距離
 }
 
 void GameScene::Update()
@@ -90,6 +99,44 @@ void GameScene::Update()
 		position.x += 1.0f;
 		//座標の変更を反映
 		sprite1->SetPosition(position);
+	}
+
+	//球移動
+	{
+		XMVECTOR moveY = XMVectorSet(0, 0.01f, 0, 0);
+		if (input->PushKey(DIK_G)) { sphere.center += moveY; }
+		else if (input->PushKey(DIK_B)) { sphere.center -= moveY; }
+
+		XMVECTOR moveX = XMVectorSet(0.01f, 0, 0, 0);
+		if (input->PushKey(DIK_V)) { sphere.center += moveX; }
+		else if (input->PushKey(DIK_N)) { sphere.center -= moveX; }
+	}
+	//stringstreamで変数の値を埋め込んで整形する
+	std::ostringstream spherestr;
+	spherestr << "Sphere("
+		<< std::fixed << std::setprecision(2)//小数点以下二桁まで
+		<< sphere.center.m128_f32[0] << ","//x
+		<< sphere.center.m128_f32[1] << ","//y
+		<< sphere.center.m128_f32[2] << ")",//z
+
+		debugText.Print(spherestr.str(), 50, 180, 1.0f);
+
+	//球と平面の当たり判定
+	XMVECTOR inter;
+	bool hit = Collision::CheckSphere2Plane(sphere, plane,&inter);
+	if (hit)
+	{
+		debugText.Print("HIT", 50, 200, 1.0f);
+		//stringstreamをリセットし、交点座標を埋め込む
+		spherestr.str("");
+		spherestr.clear();
+		spherestr<<"("
+			<< std::fixed << std::setprecision(2)//小数点以下二桁まで
+			<< sphere.center.m128_f32[0] << ","//x
+			<< sphere.center.m128_f32[1] << ","//y
+			<< sphere.center.m128_f32[2] << ")",//z
+
+			debugText.Print(spherestr.str(), 50, 220, 1.0f);
 	}
 }
 
