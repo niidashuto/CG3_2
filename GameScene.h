@@ -71,6 +71,8 @@ private: // メンバ変数
 	Sphere sphere;
 	//当たり判定 平面
 	Plane plane;
+	//当たり判定 三角形
+	Triangle triangle;
 
 	Sprite* sprite1 = nullptr;
 	Sprite* sprite2 = nullptr;
