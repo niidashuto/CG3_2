@@ -73,6 +73,8 @@ private: // メンバ変数
 	Plane plane;
 	//当たり判定 三角形
 	Triangle triangle;
+	//当たり判定 半直線
+	Ray ray;
 
 	Sprite* sprite1 = nullptr;
 	Sprite* sprite2 = nullptr;
