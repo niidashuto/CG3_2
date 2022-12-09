@@ -56,7 +56,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 	//球の初期値を設定
 	sphere.center = XMVectorSet(0, 2, 0, 1);//中心点座標
-	sphere.radius = 1.0f;//半径
+	sphere.radius = 5.0f;//半径
 	//平面の初期値を設定
 	plane.normal = XMVectorSet(0, 1, 0, 0);//法線ベクトル
 	plane.distance = 0.0f;//原点(0,0,0)からの距離
@@ -185,12 +185,38 @@ void GameScene::Update()
 	//		debugText.Print(raystr.str(), 50, 280, 1.0f);
 	//}
 
+	////レイと三角形の当たり判定
+	//XMVECTOR inter;
+	//float distance;
+	//bool hit = Collision::CheckRay2Triangle(ray, triangle, &distance, &inter);
+	//if (hit)
+	//{
+	//	debugText.Print("HIT", 50, 220, 1.0f);
+	//	//stringstreamをリセットし、交点座標を埋め込む
+	//	raystr.str("");
+	//	raystr.clear();
+	//	raystr << "inter:("
+	//		<< std::fixed << std::setprecision(2)//小数点以下二桁まで
+	//		<< inter.m128_f32[0] << ","//x
+	//		<< inter.m128_f32[1] << ","//y
+	//		<< inter.m128_f32[2] << ")",//z
+
+	//		debugText.Print(raystr.str(), 50, 240, 1.0f);
+
+	//	raystr.str("");
+	//	raystr.clear();
+	//	raystr << "distance:(" << std::fixed << std::setprecision(2) << distance << ")";
+
+	//	debugText.Print(raystr.str(), 50, 260, 1.0f);
+	//}
+
+	//レイと球の当たり判定
 	XMVECTOR inter;
 	float distance;
-	bool hit = Collision::CheckRay2Triangle(ray, triangle, &distance, &inter);
+	bool hit = Collision::CheckRay2Sphere(ray, sphere, &distance, &inter);
 	if (hit)
 	{
-		debugText.Print("HIT", 50, 220, 1.0f);
+		debugText.Print("HIT", 50, 260, 1.0f);
 		//stringstreamをリセットし、交点座標を埋め込む
 		raystr.str("");
 		raystr.clear();
@@ -200,13 +226,13 @@ void GameScene::Update()
 			<< inter.m128_f32[1] << ","//y
 			<< inter.m128_f32[2] << ")",//z
 
-			debugText.Print(raystr.str(), 50, 240, 1.0f);
+			debugText.Print(raystr.str(), 50, 280, 1.0f);
 
 		raystr.str("");
 		raystr.clear();
 		raystr << "distance:(" << std::fixed << std::setprecision(2) << distance << ")";
 
-		debugText.Print(raystr.str(), 50, 260, 1.0f);
+		debugText.Print(raystr.str(), 50, 300, 1.0f);
 	}
 	
 
