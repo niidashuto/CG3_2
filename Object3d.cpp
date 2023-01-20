@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include "BaseCollider.h"
 
 
 #pragma comment(lib, "d3dcompiler.lib")
@@ -323,10 +324,20 @@ void Object3d::UpdateViewMatrix()
 	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
 }
 
+Object3d::~Object3d()
+{
+	if (collider) {
+		delete collider;
+	}
+}
+
 bool Object3d::Initialize()
 {
 	// nullptrチェック
 	assert(device);
+
+	//クラス名の文字列を取得
+	name = typeid(*this).name();
 
 	// ヒーププロパティ
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
@@ -382,7 +393,10 @@ void Object3d::Update()
 	constMap->mat = matWorld * matView * matProjection;	// 行列の合成
 	constBuffB0->Unmap(0, nullptr);
 
-
+	//当たり判定更新
+	if (collider) {
+		collider->Update();
+	}
 }
 
 void Object3d::Draw()
@@ -403,4 +417,10 @@ void Object3d::Draw()
 
 	model->Draw(cmdList, 1);
 
+}
+
+void Object3d::SetCollider(BaseCollider* collider)
+{
+	collider->SetObject(this);
+	this->collider = collider;
 }
