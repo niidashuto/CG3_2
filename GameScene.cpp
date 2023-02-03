@@ -190,7 +190,7 @@ void GameScene::Draw()
 	// 3Dオブクジェクトの描画
 	object3d_1->Draw();
 	object3d_2->Draw();
-	player_->Draw();
+	//player_->Draw();
 	//boxObject->Draw();
 
 	/// <summary>
