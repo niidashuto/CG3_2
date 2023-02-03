@@ -25,6 +25,8 @@ public:
 
 	void DrawAll(ID3D12GraphicsCommandList * cmdList);
 
+	static DebugText* GetInstance();
+
 private:
 	// スプライトデータの配列
 	Sprite* spriteDatas[maxCharCount] = {};

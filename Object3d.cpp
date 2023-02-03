@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "BaseCollider.h"
+#include "CollisionManager.h"
 
 
 #pragma comment(lib, "d3dcompiler.lib")
@@ -327,6 +328,7 @@ void Object3d::UpdateViewMatrix()
 Object3d::~Object3d()
 {
 	if (collider) {
+		CollisionManager::GetInstance()->RemoveCollider(collider);
 		delete collider;
 	}
 }
@@ -423,4 +425,8 @@ void Object3d::SetCollider(BaseCollider* collider)
 {
 	collider->SetObject(this);
 	this->collider = collider;
+	//コリジョンマネージャに登録
+	CollisionManager::GetInstance()->AddCollider(collider);
+	//コライダーを更新しておく
+	collider->Update();
 }

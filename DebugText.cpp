@@ -65,3 +65,10 @@ void DebugText::DrawAll(ID3D12GraphicsCommandList* cmdList)
 
 	spriteIndex = 0;
 }
+
+DebugText* DebugText::GetInstance()
+{
+	static DebugText instance;
+
+	return &instance;
+}

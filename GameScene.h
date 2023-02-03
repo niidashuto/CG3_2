@@ -9,6 +9,9 @@
 #include "Model.h"
 #include "CollisionPrimitive.h"
 
+class CollisionManager;
+class Player;
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -64,8 +67,11 @@ private: // メンバ変数
 	Sprite* spriteBG = nullptr;
 	Object3d* object3d_1 = nullptr;
 	Object3d* object3d_2 = nullptr;
+	Player* player_ = nullptr;
+
 	Model* model_1 = nullptr;
 	Model* model_2 = nullptr;
+	Model* model_3 = nullptr;
 
 	//当たり判定 球
 	Sphere sphere;
@@ -78,5 +84,8 @@ private: // メンバ変数
 
 	Sprite* sprite1 = nullptr;
 	Sprite* sprite2 = nullptr;
+
+	//衝突マネージャ
+	CollisionManager* collisionManager = nullptr;
 };
 

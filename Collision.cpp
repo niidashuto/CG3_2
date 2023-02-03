@@ -202,3 +202,23 @@ bool Collision::CheckRay2Sphere(const Ray& ray, const Sphere& sphere, float* dis
 
 	return true;
 }
+
+bool Collision::CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB, DirectX::XMVECTOR* inter)
+{
+	//座標系の原点から球の中心座標への計算
+	XMVECTOR distV = XMVector3Dot(sphereA.center, sphereB.center);
+
+	float dist = distV.m128_f32[0] - sphereB.radius;
+
+	if (fabsf(dist) > sphereA.radius)
+	{
+		return false;
+	}
+	if (inter)
+	{
+		//平面上の最近接点を、疑似交点とする
+		*inter = -dist * sphereB.center + sphereA.center;
+	}
+	return true;
+
+}

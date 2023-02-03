@@ -64,5 +64,9 @@ public:
   /// <returns>Œğ·‚µ‚Ä‚¢‚é‚©”Û‚©</returns>
     static bool CheckRay2Sphere(const Ray& ray, const Sphere& sphere,
         float* distance = nullptr, DirectX::XMVECTOR* inter = nullptr);
+
+    //‹…‚Æ‹…‚Ì“–‚½‚è”»’è
+    static bool CheckSphere2Sphere(const Sphere& sphereA, const Sphere& sphereB,
+        DirectX::XMVECTOR* inter = nullptr);
 };
 

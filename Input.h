@@ -40,6 +40,8 @@ public: // メンバ関数
 	/// <returns>トリガーか</returns>
 	bool TriggerKey(BYTE keyNumber);
 
+	static Input* GetInstance();
+
 private: // メンバ変数
 	ComPtr<IDirectInput8> dinput;
 	ComPtr<IDirectInputDevice8> devkeyboard;

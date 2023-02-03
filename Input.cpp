@@ -63,3 +63,10 @@ bool Input::TriggerKey(BYTE keyNumber)
 	// トリガーでない
 	return false;
 }
+
+Input* Input::GetInstance()
+{
+	static Input instance;
+
+	return &instance;
+}
