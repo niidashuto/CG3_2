@@ -10,7 +10,7 @@ bool Collision::CheckSphere2Plane(const Sphere& sphere, const Plane& plane,
     //平面の原点距離を減算することで、平面と球の中心との距離が出る
     float dist = distV.m128_f32[0] - plane.distance;
     //距離の絶対値が半径より大きければ当たってない
-    if (fabsf(dist) > sphere.radius)
+    if (dist <= sphere.radius)
     {
         return false;
     }

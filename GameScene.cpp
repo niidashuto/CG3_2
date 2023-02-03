@@ -64,9 +64,10 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 	object3d_1->SetCollider(new SphereCollider);
 
+	
 
-	object3d_2->SetPosition({ 0,-50,0 });
-	object3d_2->SetScale({ 10.0f,10.0f,10.0f });
+	object3d_2->SetPosition({ 0,-5,0 });
+	//object3d_2->SetScale({ 5.0f,5.0f,5.0f });
 
 	object3d_1->SetScale({ 5,5,5 });
 	player_->SetScale({ 5,5,5 });
@@ -75,11 +76,70 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	//球の初期値を設定
 	sphere.center = XMVectorSet(0, 2, 0, 1);//中心点座標
 	sphere.radius = 5.0f;//半径
+
+	//平面の初期値を設定
+	plane.normal = XMVectorSet(0, -5, 0, 0);//法線ベクトル
+	plane.distance = 0.0f;//原点(0,0,0)からの距離
 	
 }
 
 void GameScene::Update()
 {
+
+	//球移動
+	{
+		XMVECTOR moveY = XMVectorSet(0, 0.5f, 0, 0);
+		if (input->PushKey(DIK_UP)) { sphere.center += moveY; }
+		else if (input->PushKey(DIK_DOWN)) { sphere.center -= moveY; }
+
+		XMVECTOR moveX = XMVectorSet(0.5f, 0, 0, 0);
+		if (input->PushKey(DIK_LEFT)) { sphere.center += moveX; }
+		else if (input->PushKey(DIK_RIGHT)) { sphere.center -= moveX; }
+
+		object3d_1->SetPosition({ sphere.center.m128_f32[0],sphere.center.m128_f32[1],sphere.center.m128_f32[2] });
+	}
+	//stringstreamで変数の値を埋め込んで整形する
+	std::ostringstream spherestr;
+	spherestr << "Sphere:("
+		<< std::fixed << std::setprecision(2)    //小数点以下2桁まで
+		<< sphere.center.m128_f32[0] << ","        //x
+		<< sphere.center.m128_f32[1] << ","        //y
+		<< sphere.center.m128_f32[2] << ","        //z
+		<< sphere.radius << ")";
+	spherestr << "Ground:("
+		<< std::fixed << std::setprecision(2)    //小数点以下2桁まで
+		<< plane.normal.m128_f32[0] << ","        //x
+		<< plane.normal.m128_f32[1] << ","        //y
+		<< plane.normal.m128_f32[2] << ")";        //z
+
+	debugText.Print(spherestr.str(), 50, 180, 1.0f);
+
+	//球と平面の当たり判定
+	XMVECTOR inter;
+	bool hit = Collision::CheckSphere2Plane(sphere, plane,&inter);
+	if (hit)
+	{
+		debugText.Print("HIT", 50, 200, 1.0f);
+		//stringstreamをリセットし、交点座標を埋め込む
+		spherestr.str("");
+		spherestr.clear();
+		spherestr<<"("
+			<< std::fixed << std::setprecision(2)//小数点以下二桁まで
+			<< sphere.center.m128_f32[0] << ","//x
+			<< sphere.center.m128_f32[1] << ","//y
+			<< sphere.center.m128_f32[2] << ")",//z
+
+			debugText.Print(spherestr.str(), 50, 220, 1.0f);
+
+		object3d_1->SetColor({ 1,0,0,1 });
+	}
+	else
+	{
+		object3d_1->SetColor({ 1,1,1,1 });
+	}
+
+	object3d_2->SetPosition({ plane.normal.m128_f32[0],plane.normal.m128_f32[1],plane.normal.m128_f32[2] });
+
 	player_->SetInput(input);
 
 	object3d_1->Update();

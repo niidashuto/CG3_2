@@ -30,7 +30,7 @@ public: // サブクラス
 	// 定数バッファ用データ構造体B0
 	struct ConstBufferDataB0
 	{
-		//XMFLOAT4 color;	// 色 (RGBA)
+		XMFLOAT4 color;	// 色 (RGBA)
 		XMMATRIX mat;	// ３Ｄ変換行列
 	};
 
@@ -229,6 +229,8 @@ public: // メンバ関数
 
 	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
 
+	void SetColor(const XMFLOAT4& color) { this->color_ = color; }
+
 protected: // メンバ変数
 
 	//クラス名(デバッグ用)
@@ -240,7 +242,7 @@ protected: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 
 	// 色
-	XMFLOAT4 color = { 1,1,1,1 };
+	XMFLOAT4 color_ = { 1,1,1,1 };
 	// ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
 	// X,Y,Z軸回りのローカル回転角
